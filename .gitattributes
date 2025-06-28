@@ -1,0 +1,19 @@
+# 设置默认行为
+* text=auto
+
+# 对于模型文件，保持原始格式
+model/biobert/biobert/tokenizer.json text eol=lf
+model/biobert/biobert/vocab.txt text eol=lf
+
+# Python 源码文件使用 LF
+*.py text eol=lf
+
+# 文档文件
+*.md text eol=lf
+*.txt text eol=lf
+
+# 二进制文件
+*.npy binary
+*.pkl binary
+*.h5 binary
+*.csv text eol=lf

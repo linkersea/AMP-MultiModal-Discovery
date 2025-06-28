@@ -373,5 +373,5 @@ os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
 ---
 
-**联系方式**: [your.email@domain.com]  
+**联系方式**: [dengs2021@163.com]  
 **项目主页**: [https://github.com/linkersea/AMP-MultiModal-Discovery]
