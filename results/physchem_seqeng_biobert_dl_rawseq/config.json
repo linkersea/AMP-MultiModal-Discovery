@@ -1,0 +1,15 @@
+{
+  "raw_csv": "data/raw/120dataset.csv",
+  "physchem_csv": "data/processed/120dataset_physchem.csv",
+  "biobert_emb": "data/processed/biobert_emb.npy",
+  "out_dir": "results/physchem_seqeng_biobert_dl_rawseq",
+  "rawseq_maxlen": 20,
+  "embedding_dim": 32,
+  "ngram_n": 3,
+  "window_size": 5,
+  "terminal_n": 3,
+  "epochs": 30,
+  "batch_size": 16,
+  "task": "classification",
+  "classify_threshold": 0.7
+}
