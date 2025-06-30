@@ -58,6 +58,7 @@ top15.csv
 Thumbs.db
 
 # 个人配置文件
+analyze_vocabulary.py
 chinese_documents_status.md
 CODE_VALIDATION_REPORT.md
 README_GITHUB.md
