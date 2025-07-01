@@ -59,7 +59,7 @@ class FeatureExtractor:
         return np.array(seq_ids, dtype=np.int32)
 
     @staticmethod
-    def extract_ngram_features(seqs, n=3):
+    def extract_ngram_features(seqs, n=3): #氨基酸三肽频率
         from itertools import product
         aa = 'ACDEFGHIKLMNPQRSTVWY'
         ngrams = [''.join(p) for p in product(aa, repeat=n)]

@@ -20,7 +20,7 @@ from sklearn.decomposition import PCA
 import optuna
 from src.features.feature_extractor import FeatureExtractor
 
-def binarize_labels(df, threshold=0.8):
+def binarize_labels(df, threshold=0.8): #活性阈值
     df['label'] = (df['activity'] >= threshold).astype(int)
     return df
 
@@ -54,23 +54,6 @@ def extract_rawseq_features(seqs, max_len=20):
         ids = ids + [0]*(max_len - len(ids)) if len(ids) < max_len else ids[:max_len]
         seq_ids.append(ids)
     return np.array(seq_ids, dtype=np.int32)
-
-def extract_ngram_features(seqs, n=3):
-    # 三肽/四肽频率特征
-    from itertools import product
-    aa = 'ACDEFGHIKLMNPQRSTVWY'
-    ngrams = [''.join(p) for p in product(aa, repeat=n)]
-    ngram_idx = {ng: i for i, ng in enumerate(ngrams)}
-    features = np.zeros((len(seqs), len(ngrams)), dtype=np.float32)
-    for i, seq in enumerate(seqs):
-        seq = seq.upper()
-        for j in range(len(seq)-n+1):
-            ng = seq[j:j+n]
-            if ng in ngram_idx:
-                features[i, ngram_idx[ng]] += 1
-        if len(seq)-n+1 > 0:
-            features[i] /= (len(seq)-n+1)
-    return features, ngrams
 
 def get_classifiers():
     return {
@@ -329,7 +312,7 @@ def main():
     os.makedirs(args.out_dir, exist_ok=True)
 
     df = pd.read_csv(args.raw_csv)
-    df = binarize_labels(df, threshold=0.8)
+    df = binarize_labels(df, threshold=0.8)#活性阈值
     df.to_csv(os.path.join(args.out_dir, "dataset_binarized.csv"), index=False)
 
     if not os.path.exists(args.physchem_csv):

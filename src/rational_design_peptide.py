@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-基于活性位点分析的抗菌多肽理性设计
-分析训练数据中的关键位点和氨基酸组合
+基于活性位点分析的抗菌多肽数据洞察模块
+分析训练数据中的关键位点、氨基酸组合和motif模式
+为结构感知设计提供数据驱动的洞察
 """
 
 import pandas as pd
@@ -168,119 +169,8 @@ def amino_acid_preference_analysis(df):
     
     return aa_stats
 
-def design_optimized_peptides(position_contributions, motif_activities, aa_stats, target_length=12):
-    """基于分析结果设计优化的多肽序列"""
-    print("\n" + "="*40)
-    print("基于分析结果的理性设计")
-    print("="*40)
-    
-    # 获取高活性氨基酸
-    high_activity_aa = [aa for aa, stats in aa_stats.items() 
-                       if stats['mean_activity'] > np.mean([s['mean_activity'] for s in aa_stats.values()])]
-    
-    print(f"高活性氨基酸: {', '.join(sorted(high_activity_aa))}")
-    
-    # 获取高活性motif
-    high_activity_motifs = []
-    for motif, activities in motif_activities.items():
-        if len(activities) >= 3 and np.mean(activities) > 0.5:  # 活性阈值
-            high_activity_motifs.append((motif, np.mean(activities)))
-    
-    high_activity_motifs.sort(key=lambda x: x[1], reverse=True)
-    top_motifs = [motif for motif, _ in high_activity_motifs[:20]]
-    
-    print(f"高活性motif数量: {len(top_motifs)}")
-    print(f"Top 5 motif: {top_motifs[:5]}")
-    
-    # 设计策略1: 基于高活性氨基酸组合
-    design1_sequences = []
-    
-    print(f"\n设计策略1: 高活性氨基酸随机组合")
-    for i in range(20):
-        sequence = ""
-        for _ in range(target_length):
-            # 按活性加权随机选择氨基酸
-            weights = [aa_stats[aa]['mean_activity'] for aa in high_activity_aa]
-            chosen_aa = np.random.choice(high_activity_aa, p=np.array(weights)/sum(weights))
-            sequence += chosen_aa
-        design1_sequences.append(sequence)
-        print(f"  设计{i+1:2d}: {sequence}")
-    
-    # 设计策略2: 基于motif组合
-    design2_sequences = []
-    
-    print(f"\n设计策略2: 高活性motif组合")
-    for i in range(20):
-        sequence = ""
-        remaining_length = target_length
-        
-        while remaining_length > 0:
-            # 选择适合的motif
-            suitable_motifs = [motif for motif in top_motifs if len(motif) <= remaining_length]
-            
-            if suitable_motifs and np.random.random() < 0.7:  # 70%概率使用motif
-                chosen_motif = np.random.choice(suitable_motifs)
-                sequence += chosen_motif
-                remaining_length -= len(chosen_motif)
-            else:
-                # 使用单个高活性氨基酸填充
-                weights = [aa_stats[aa]['mean_activity'] for aa in high_activity_aa]
-                chosen_aa = np.random.choice(high_activity_aa, p=np.array(weights)/sum(weights))
-                sequence += chosen_aa
-                remaining_length -= 1
-        
-        design2_sequences.append(sequence)
-        print(f"  设计{i+1:2d}: {sequence}")
-    
-    # 设计策略3: 基于位置特异性
-    design3_sequences = []
-    
-    if position_contributions:
-        print(f"\n设计策略3: 基于位置特异性优化")
-        base_length = len(position_contributions)
-        
-        for i in range(20):
-            sequence = ""
-            
-            # 如果目标长度与分析长度不同，需要调整
-            if target_length == base_length:
-                # 直接使用位置信息
-                for pos in range(target_length):
-                    if pos in position_contributions and position_contributions[pos]:
-                        # 从该位置的前3个最佳氨基酸中选择
-                        pos_aa = position_contributions[pos]
-                        sorted_pos_aa = sorted(pos_aa.keys(), 
-                                             key=lambda aa: pos_aa[aa]['mean_activity'], reverse=True)
-                        chosen_aa = np.random.choice(sorted_pos_aa[:min(3, len(sorted_pos_aa))])
-                        sequence += chosen_aa
-                    else:
-                        # 使用全局最佳氨基酸
-                        weights = [aa_stats[aa]['mean_activity'] for aa in high_activity_aa]
-                        chosen_aa = np.random.choice(high_activity_aa, p=np.array(weights)/sum(weights))
-                        sequence += chosen_aa
-            else:
-                # 使用全局优化策略
-                for _ in range(target_length):
-                    weights = [aa_stats[aa]['mean_activity'] for aa in high_activity_aa]
-                    chosen_aa = np.random.choice(high_activity_aa, p=np.array(weights)/sum(weights))
-                    sequence += chosen_aa
-            
-            design3_sequences.append(sequence)
-            print(f"  设计{i+1:2d}: {sequence}")
-    
-    # 合并所有设计
-    all_designed_sequences = design1_sequences + design2_sequences + design3_sequences
-    
-    # 去重
-    unique_sequences = list(set(all_designed_sequences))
-    
-    print(f"\n总设计序列数: {len(all_designed_sequences)}")
-    print(f"去重后序列数: {len(unique_sequences)}")
-    
-    return unique_sequences
-
 def main():
-    """主函数"""
+    """主函数 - 进行数据分析并返回结果供其他模块使用"""
     print("=" * 50)
     print("基于活性位点分析的抗菌多肽理性设计")
     print("=" * 50)
@@ -297,25 +187,7 @@ def main():
     # 4. 氨基酸偏好性分析
     aa_stats = amino_acid_preference_analysis(df)
     
-    # 5. 理性设计新序列
-    designed_sequences = design_optimized_peptides(
-        position_contributions, motif_activities, aa_stats, target_length=12
-    )
-    
-    # 6. 保存设计结果
-    design_df = pd.DataFrame({
-        'sequence': designed_sequences,
-        'design_method': ['rational_design'] * len(designed_sequences)
-    })
-    
-    output_file = 'rationally_designed_peptides.csv'
-    design_df.to_csv(output_file, index=False)
-    
-    print(f"\n设计的序列已保存到: {output_file}")
-    print(f"可以使用预测脚本进行活性预测:")
-    print(f"python src/predict_peptide.py")
-    
-    # 7. 生成分析报告
+    # 5. 生成分析报告
     report_file = 'rational_design_analysis_report.txt'
     with open(report_file, 'w', encoding='utf-8') as f:
         f.write("抗菌多肽理性设计分析报告\n")
@@ -332,8 +204,7 @@ def main():
             f.write(f"   {i+1:2d}. {aa}: {stats['mean_activity']:.3f} (频率: {stats['frequency']:.3f})\n")
         f.write("\n")
         
-        f.write("3. 设计序列统计\n")
-        f.write(f"   总设计序列: {len(designed_sequences)}\n")
+        f.write("3. 理论最优序列信息\n")
         f.write(f"   理论最优序列: {optimal_sequence}\n")
         f.write(f"   最优长度: {optimal_length}\n\n")
         
@@ -345,13 +216,14 @@ def main():
             f.write(f"   {i+1:2d}. {motif}: {avg_act:.3f}\n")
     
     print(f"分析报告已保存到: {report_file}")
+    print("数据分析完成，结果将供结构感知设计使用。")
     
     return {
-        'designed_sequences': designed_sequences,
         'position_contributions': position_contributions,
         'motif_activities': motif_activities,
         'aa_stats': aa_stats,
-        'optimal_sequence': optimal_sequence
+        'optimal_sequence': optimal_sequence,
+        'optimal_length': optimal_length
     }
 
 if __name__ == '__main__':
