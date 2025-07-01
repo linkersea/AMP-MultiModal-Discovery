@@ -62,6 +62,7 @@ src/models/
 src/physchem_seqeng_biobert_dl_rawseq_cv.py
 src/featuresave.py
 src/vae_peptide_generator.py
+src/train_rawseq_cnn_regression.py
 analyze_vocabulary.py
 chinese_documents_status.md
 CODE_VALIDATION_REPORT.md
