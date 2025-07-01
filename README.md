@@ -44,12 +44,16 @@ CNN层 (Embedding→Conv1D→MaxPool)    Dense层 (全连接网络)
 - **优势**: 保留已验证序列的核心活性模式
 
 #### 方法2: 理性设计 (Rational Design)
-- **原理**: 基于抗菌肽生物学知识的定向设计
-- **策略**: 
-  - 两亲性螺旋结构
-  - β折叠结构
-  - 无规卷曲结构
-- **考虑因素**: 净电荷、疏水性比例、芳香族氨基酸含量
+- **原理**: 数据驱动的结构感知设计，结合训练数据统计分析与生物学知识
+- **数据洞察**: 
+  - 氨基酸活性贡献分析
+  - 高活性motif模式识别
+  - 位置特异性统计分析
+- **结构策略**: 
+  - 两亲性螺旋结构 (40%): 膜表面结合和扰动
+  - β折叠结构 (35%): 跨膜孔道形成
+  - 无规卷曲结构 (25%): 灵活性和适应性
+- **设计特点**: 基于统计数据指导的结构生物学设计，兼具科学依据和数据支撑
 
 #### 方法3: VAE生成 (Variational Autoencoder)
 - **原理**: 深度学习驱动的序列创新生成
@@ -79,6 +83,7 @@ AMP-MultiModal-Discovery/
 │   │   └── logger_config.py              # 日志配置
 │   ├── advanced_vae_generator.py          # VAE多肽生成器
 │   ├── predict_peptide.py                # 多肽活性预测模块
+│   ├── rational_design_peptide.py        # 数据驱动的理性设计分析模块
 │   ├── peptide_classification_pipeline.py # 分类管道
 │   ├── physchem_seqeng_biobert_dl_rawseq_cv.py  # 模型训练与验证
 │   └── vae_peptide_generator.py          # 基础VAE生成器
@@ -116,9 +121,9 @@ python three_method_discovery.py
 
 # 自定义参数运行
 python three_method_discovery.py \
-  --sv_count 200 \
-  --rd_count 100 \
-  --vae_count 150 \
+  --sv_count 300 \
+  --rd_count 200 \
+  --vae_count 250 \
   --model_path results/physchem_seqeng_biobert_dl_rawseq/best_physchem_seqeng_biobert_rawseq_classification.h5
 ```
 
@@ -136,6 +141,53 @@ python src/predict_peptide.py \
 ```bash
 python src/physchem_seqeng_biobert_dl_rawseq_cv.py
 ```
+
+### 4. 单独运行理性设计数据分析
+
+```bash
+# 运行数据分析，生成统计报告
+python src/rational_design_peptide.py
+
+# 分析结果将保存到 rational_design_analysis_report.txt
+# 数据洞察供主框架的结构感知设计使用
+```
+
+### 5. 快速演示系统功能
+
+```bash
+# 运行演示脚本，包含预测和发现的完整示例
+python demo.py
+
+# 演示包含：
+# 1. 使用示例序列进行活性预测
+# 2. 运行小规模的三方法发现流程
+```
+
+## 理性设计数据分析
+
+系统会自动执行全面的数据驱动分析，为结构感知设计提供科学依据：
+
+### 1. 氨基酸活性贡献分析
+- 计算每种氨基酸的平均活性贡献
+- 统计频率分布和标准差
+- 识别高活性氨基酸集合
+
+### 2. Motif模式识别
+- 2-4氨基酸motif的活性分析
+- 高活性motif的频率统计
+- 为序列设计提供功能片段
+
+### 3. 位置特异性分析
+- 针对最常见序列长度的位置分析
+- 每个位置的最优氨基酸识别
+- 理论最优序列构建
+
+### 4. 自动化报告生成
+分析完成后会生成 `rational_design_analysis_report.txt`，包含：
+- 数据概况和统计信息
+- Top 10 高活性氨基酸排序
+- Top 10 高活性motif模式
+- 理论最优序列信息
 
 ## 核心算法原理
 
@@ -328,7 +380,7 @@ interpolated = vae.interpolate_sequences("KWKLF", "RRWWF", num_steps=5)
 
 ### 生成多样性
 - **序列变异**: 高保守性，85%序列与种子序列相似度>0.7
-- **理性设计**: 中等多样性，符合设计约束
+- **理性设计**: 数据驱动的结构多样性，结合统计洞察与生物学约束
 - **VAE生成**: 高创新性，60%序列为全新组合
 
 ## 常见问题与解决

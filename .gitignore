@@ -58,6 +58,9 @@ top15.csv
 Thumbs.db
 
 # 个人配置文件
+physchem_seqeng_biobert_dl_rawseq_cv.py
+featuresave.py
+vae_peptide_generator.py
 analyze_vocabulary.py
 chinese_documents_status.md
 CODE_VALIDATION_REPORT.md
