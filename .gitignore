@@ -57,10 +57,11 @@ top15.csv
 .DS_Store
 Thumbs.db
 
-# 个人配置文件
-physchem_seqeng_biobert_dl_rawseq_cv.py
-featuresave.py
-vae_peptide_generator.py
+# 个人配置文件和冗余代码（本地保留，不上传）
+src/models/
+src/physchem_seqeng_biobert_dl_rawseq_cv.py
+src/featuresave.py
+src/vae_peptide_generator.py
 analyze_vocabulary.py
 chinese_documents_status.md
 CODE_VALIDATION_REPORT.md

@@ -75,24 +75,20 @@ AMP-MultiModal-Discovery/
 ├── src/                                    # 源代码目录
 │   ├── features/
 │   │   └── feature_extractor.py          # 特征提取器
-│   ├── models/
-│   │   ├── __init__.py
-│   │   └── pretrained_model.py           # 预训练模型管理
 │   ├── utils/
 │   │   ├── __init__.py
 │   │   └── logger_config.py              # 日志配置
 │   ├── advanced_vae_generator.py          # VAE多肽生成器
 │   ├── predict_peptide.py                # 多肽活性预测模块
 │   ├── rational_design_peptide.py        # 数据驱动的理性设计分析模块
-│   ├── peptide_classification_pipeline.py # 分类管道
-│   ├── physchem_seqeng_biobert_dl_rawseq_cv.py  # 模型训练与验证
-│   └── vae_peptide_generator.py          # 基础VAE生成器
+│   ├── peptide_classification_pipeline.py # 分类模型数据结构与模型选择对比管道
+│   └── physchem_seqeng_biobert_dl_rawseq_cv_fixed.py #最佳模型五折交叉验证与保存
 ├── data/                                  # 数据目录
 │   ├── raw/
 │   │   ├── 120dataset.csv               # 训练数据集
 │   │   └── 11pep.csv                    # 测试序列
 │   └── processed/                        # 预处理后的数据
-├── results/                              # 模型结果
+├── results/                              # 模型保存目录
 │   └── physchem_seqeng_biobert_dl_rawseq/
 │       ├── best_physchem_seqeng_biobert_rawseq_classification.h5  # 最佳模型
 │       ├── best_classification_scaler.pkl  # 特征标准化器
@@ -101,7 +97,8 @@ AMP-MultiModal-Discovery/
 │   └── biobert/                          # BioBERT预训练模型
 ├── three_method_discovery.py             # 主发现框架
 ├── calculate_grafting_density.py         # 接枝密度计算
-└── analyze_results.py                   # 结果分析
+├── analyze_results.py                   # 结果分析
+└── rational_design_analysis_report.txt   # 理性设计分析报告
 ```
 
 ### 特殊依赖
@@ -139,7 +136,8 @@ python src/predict_peptide.py \
 ### 3. 训练新的分类模型
 
 ```bash
-python src/physchem_seqeng_biobert_dl_rawseq_cv.py
+# 注意：模型训练脚本已从公开仓库移除，如需训练请联系作者
+# 或参考项目论文中的模型架构自行实现
 ```
 
 ### 4. 单独运行理性设计数据分析
