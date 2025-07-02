@@ -111,7 +111,7 @@ class ThreeMethodPeptideDiscovery:
                 if mutation_intensity == 'low':
                     num_mutations = np.random.randint(1, 3)  # 1-2次变异
                 elif mutation_intensity == 'medium':
-                    num_mutations = np.random.randint(1, 4)  # 1-3次变异
+                    num_mutations = np.random.randint(2, 4)  # 2-3次变异
                 else:  # high
                     num_mutations = np.random.randint(2, 5)  # 2-4次变异
                     
