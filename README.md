@@ -82,7 +82,8 @@ AMP-MultiModal-Discovery/
 │   ├── predict_peptide.py                # 多肽活性预测模块
 │   ├── rational_design_peptide.py        # 数据驱动的理性设计分析模块
 │   ├── peptide_classification_pipeline.py # 分类模型数据结构与模型选择对比管道
-│   └── physchem_seqeng_biobert_dl_rawseq_cv_fixed.py #最佳模型五折交叉验证与保存
+│   ├── physchem_seqeng_biobert_dl_rawseq_cv_fixed.py #最佳模型五折交叉验证与保存
+│   └── summarize_results.py               #分析模型训练和比较实验结果
 ├── data/                                  # 数据目录
 │   ├── raw/
 │   │   ├── 120dataset.csv               # 训练数据集
@@ -97,7 +98,7 @@ AMP-MultiModal-Discovery/
 │   └── biobert/                          # BioBERT预训练模型
 ├── three_method_discovery.py             # 主发现框架
 ├── calculate_grafting_density.py         # 接枝密度计算
-├── analyze_results.py                   # 结果分析
+├── analyze_results.py                   # 候选肽结果分析
 └── rational_design_analysis_report.txt   # 理性设计分析报告
 ```
 
@@ -136,8 +137,10 @@ python src/predict_peptide.py \
 ### 3. 训练新的分类模型
 
 ```bash
-# 注意：模型训练脚本已从公开仓库移除，如需训练请联系作者
-# 或参考项目论文中的模型架构自行实现
+#分类模型数据结构与模型选择对比管道，寻找最佳模型与数据结构
+python src/peptide_classification_pipeline.py
+# 最佳模型五折交叉验证与保存
+python src/physchem_seqeng_biobert_dl_rawseq_cv.py
 ```
 
 ### 4. 单独运行理性设计数据分析
@@ -160,6 +163,24 @@ python demo.py
 # 1. 使用示例序列进行活性预测
 # 2. 运行小规模的三方法发现流程
 ```
+### 6. 结果分析脚本
+
+使用 `src/summarize_results.py` 分析模型训练和比较实验结果；
+使用 `analyze_results.py` 对发现的候选序列进行全面分析：
+
+```bash
+# 汇总所有模型训练实验结果
+python src/summarize_results.py
+# 自动分析最新的发现结果
+python analyze_results.py
+# 分析特定结果目录
+python analyze_results.py --results_dir results_three_methods_20250705_144303
+```
+
+**输出文件：**
+- `results/classification/all_experiment_summary.csv`：所有实验结果汇总
+- `results/classification/all_experiment_report.md`：自动生成的分析报告
+- `detailed_analysis_report.md`：详细的Markdown分析报告
 
 ## 理性设计数据分析
 
@@ -411,7 +432,7 @@ os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 ```bibtex
 @software{amp_multimodal_discovery,
   title={AMP-MultiModal-Discovery: Intelligent Discovery System for Antimicrobial Peptides using Multi-modal Deep Learning},
-  author={Your Name},
+  author={linkersea},
   year={2025},
   url={https://github.com/linkersea/AMP-MultiModal-Discovery}
 }
