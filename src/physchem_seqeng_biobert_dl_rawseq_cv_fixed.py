@@ -175,11 +175,7 @@ class PhysChemSeqEngBioBERTRawSeqPipeline:
             return embeddings
             
         except ImportError:
-            print("警告: transformers库未安装，使用随机嵌入代替BioBERT")
-            # Generate random embeddings as fallback
-            embeddings = np.random.randn(len(sequences), 768)  # 768 is BioBERT embedding size
-            np.save(save_path, embeddings)
-            return embeddings
+            print("警告: BioBERT嵌入提取失败")
     
     def load_and_prepare_features(self, df):
         """Load and prepare all features for physchem_seqeng_biobert_dl_rawseq combination"""

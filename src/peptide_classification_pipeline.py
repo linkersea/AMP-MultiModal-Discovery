@@ -183,11 +183,6 @@ def load_features(args, df, biobert_emb_path=None):
         features.append(terminal_features)
         feature_names += [f"Nterm_{aa}" for aa in fe.AA_LIST] + [f"Cterm_{aa}" for aa in fe.AA_LIST]
         
-        # PSSM 特征
-        if 'pssm' in feature_set or args.pssm_dir:
-            pssm_features = fe.extract_pssm_features(df['sequence'], pssm_dir=args.pssm_dir)
-            features.append(pssm_features)
-            feature_names += [f"PSSM_{aa}" for aa in fe.AA_LIST]
     if 'biobert' in feature_set and biobert_emb_path:
         biobert_emb = np.load(biobert_emb_path)
         features.append(biobert_emb)
@@ -293,7 +288,7 @@ def main():
     parser.add_argument('--biobert_dir', type=str, default='model/biobert/biobert')
     parser.add_argument('--biobert_emb', type=str, default='data/processed/biobert_emb.npy')
     parser.add_argument('--features', type=str, default='physchem+seqeng',
-                        help='特征组合，支持physchem, seqeng, physchem+seqeng, biobert, pssm等')
+                        help='特征组合，支持physchem, seqeng, physchem+seqeng, biobert等')
     parser.add_argument('--no_dl', action='store_true', help='不运行深度学习模型')
     parser.add_argument('--no_rawseq', action='store_true', help='深度学习时不使用原始序列token id')
     parser.add_argument('--out_dir', type=str, default='results/classification')
@@ -306,7 +301,6 @@ def main():
     parser.add_argument('--ngram_n', type=int, default=3, help='n-gram的n')
     parser.add_argument('--window_size', type=int, default=5, help='滑动窗口大小')
     parser.add_argument('--terminal_n', type=int, default=3, help='N/C端长度')
-    parser.add_argument('--pssm_dir', type=str, default=None, help='PSSM文件目录')
     args = parser.parse_args()
 
     os.makedirs(args.out_dir, exist_ok=True)

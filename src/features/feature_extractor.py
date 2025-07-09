@@ -107,14 +107,6 @@ class FeatureExtractor:
             features.append(n_counts + c_counts)
         return np.array(features)
 
-    @staticmethod
-    def extract_pssm_features(seqs, pssm_dir=None):
-        # 伪代码：假设pssm_dir下有与seqs顺序对应的PSSM文件（如iFeature格式）
-        # 实际应用需根据PSSM文件格式解析
-        # 这里只返回全零特征作为占位
-        features = np.zeros((len(seqs), 20))
-        return features
-
     def batch_extract_and_save(self, csv_path, seq_col='sequence', save_path=None):
         df = pd.read_csv(csv_path)
         feature_list = []
