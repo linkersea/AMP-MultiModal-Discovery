@@ -14,7 +14,7 @@
 
 ## 技术架构
 
-### 1. 核心分类模型 (PhysChemSeqEngBioBERT+RawSeq CNN)
+### 1. 核心分类模型 (PBSR_CNN)
 
 **特征组合:**
 - **理化特征**: 氨基酸组成、二肽组成、分子量、疏水性、等电点等
@@ -81,13 +81,11 @@ AMP-MultiModal-Discovery/
 │   ├── advanced_vae_generator.py          # VAE多肽生成器
 │   ├── predict_peptide.py                # 多肽活性预测模块
 │   ├── rational_design_peptide.py        # 数据驱动的理性设计分析模块
-│   ├── peptide_classification_pipeline.py # 分类模型数据结构与模型选择对比管道
 │   ├── physchem_seqeng_biobert_dl_rawseq_cv_fixed.py #最佳模型五折交叉验证与保存
 │   └── summarize_results.py               #分析模型训练和比较实验结果
 ├── data/                                  # 数据目录
 │   ├── raw/
 │   │   ├── 120dataset.csv               # 训练数据集
-│   │   └── 11pep.csv                    # 测试序列
 │   └── processed/                        # 预处理后的数据
 ├── results/                              # 模型保存目录
 │   └── physchem_seqeng_biobert_dl_rawseq/
@@ -97,8 +95,6 @@ AMP-MultiModal-Discovery/
 ├── model/
 │   └── biobert/                          # BioBERT预训练模型
 ├── three_method_discovery.py             # 主发现框架
-├── calculate_grafting_density.py         # 接枝密度计算
-├── analyze_results.py                   # 候选肽结果分析
 └── rational_design_analysis_report.txt   # 理性设计分析报告
 ```
 
